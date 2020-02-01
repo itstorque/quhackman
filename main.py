@@ -38,6 +38,10 @@ path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
 aim2 = vector(5, 0)
+top = vector(-40,175)
+bottom = vector(-40,-175)
+right = vector(115,0)
+left = vector(-195,0)
 pacman = vector(-40, -80)
 pacman2 = vector(-80, -80)
 ghosts = [
@@ -171,10 +175,30 @@ def move():
     clear()
 
     if valid(pacman + aim):
-        pacman.move(aim)
+#        print('pacman bef',pacman)
+        if(pacman == top and aim == vector(0,5)):
+            pacman.move(bottom-top)
+        elif(pacman == bottom and aim == vector(0,-5)):
+            pacman.move(top-bottom)
+        elif(pacman == left and aim == vector(-5,0)):
+            pacman.move(right-left)
+        elif(pacman == right and aim == vector(5,0)):
+            pacman.move(left-right)
+        else:
+            pacman.move(aim)
+#        print('pacman aft', pacman)
 
     if valid(pacman2 + aim2):
-        pacman2.move(aim2)
+        if(pacman2 == top and aim2 == vector(0,5)):
+            pacman2.move(bottom-top)
+        elif(pacman2 == bottom and aim2 == vector(0,-5)):
+            pacman2.move(top-bottom)
+        elif(pacman2 == left and aim2 == vector(-5,0)):
+            pacman2.move(right-left)
+        elif(pacman2 == right and aim2 == vector(5,0)):
+            pacman2.move(left-right)
+        else:
+            pacman2.move(aim2)
 
     if past_input_a != None:
         change(*past_input_a, "a", save=False)
