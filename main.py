@@ -23,7 +23,9 @@ while revealState != "y" and revealState != "n":
 # Number of computer players
 artificialGhostCount = None
 while artificialGhostCount == None:
-    try: artificialGhostCount = int(input("How many AI ghosts do you want? [Integer] >   "))
+    try:
+        temp = int(input("How many AI ghosts do you want? [Max 8] >   "))
+        if temp < 9: artificialGhostCount = temp
     except: pass
 
 
@@ -41,6 +43,9 @@ register_shape(sgate)
 register_shape(zgate)
 player2 = 'turtle'
 
+screensize(800, 600)
+setworldcoordinates(-160, -160, 160, 160)
+
 simulation = simulate.QuantumSimulation()
 
 resizemode('auto')
@@ -49,7 +54,7 @@ state = {'score_a': 0, 'score_b': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
-aim2 = vector(5, 0)
+aim2 = vector(-5, 0)
 top = vector(-40,175)
 bottom = vector(-40,-175)
 right = vector(115,0)
@@ -61,7 +66,12 @@ ghosts = [
     [vector(-180, -160), vector(0, 5)],
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(-5, 0)],
-]
+    [vector(-180, 160), vector(0, -5)],
+    [vector(-180, -160), vector(5, 0)],
+    [vector(100, 160), vector(0, -5)],
+    [vector(100, -160), vector(0, 5)],
+][:artificialGhostCount-1]
+if artificialGhostCount == 0: ghosts = []
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 6, 0, 0, 0, 0,
@@ -135,7 +145,7 @@ def world():
             if tile == 1:
                 path.up()
                 path.goto(x + 10, y + 10)
-                path.dot(2, 'white')
+                path.dot(4, 'black')
 
             if tile == 4:
                 path.up()
@@ -182,7 +192,7 @@ def move():
     global past_input_b
 
     writer.undo()
-    writer.write(str(state['score_a']) + " | " + str(state['score_b']))
+    writer.write(str(state['score_a']) + " | " + str(state['score_b']), font=("Arial", 16, "normal"))
 
     clear()
 
@@ -236,7 +246,7 @@ def move():
     shape(player1)
     resizemode('auto')
     penup()
-    turtlesize(0.1)
+    turtlesize(1)
     color('green')
     stamp()
 
@@ -245,7 +255,7 @@ def move():
     shape(player2)
     resizemode('auto')
     penup()
-    turtlesize(1)
+    turtlesize(1.5)
     color('green')
     stamp()
 
@@ -302,7 +312,7 @@ hideturtle()
 tracer(False)
 writer.goto(160, 160)
 writer.color('white')
-writer.write(str(state['score_a']) + " | " + str(state['score_b']))
+writer.write(str(state['score_a']) + " | " + str(state['score_b']), font=("Arial", 16, "normal"))
 listen()
 onkey(lambda: change(5, 0, "a"), 'Right')
 onkey(lambda: change(-5, 0, "a"), 'Left')
