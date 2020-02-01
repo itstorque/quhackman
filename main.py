@@ -13,22 +13,31 @@ Exercises
 from random import choice
 from turtle import *
 from freegames import floor, vector
+import simulate
 
 past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
 # shape("turtle")
-register_shape('player.gif')
-shape('player.gif')
+player1 = 'player.gif'
+tgate = 'gateT.gif'
+sgate = 'gateS.gif'
+register_shape(player1)
+register_shape(tgate)
+register_shape(sgate)
+player2 = 'turtle'
+
+simulation = simulate.quantum_simulation()
+
 resizemode('auto')
 
-state = {'score': 0}
+state = {'score_a': 0, 'score_b': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
 aim2 = vector(5, 0)
 pacman = vector(-40, -80)
-pacman2 = vector(-20, -80)
+pacman2 = vector(-80, -80)
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
@@ -37,7 +46,7 @@ ghosts = [
 ]
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 4, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
@@ -48,8 +57,8 @@ tiles = [
     0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-    0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-    0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0,
+    0, 1, 0, 0, 1, 0, 0, 1, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+    0, 1, 1, 0, 1, 5, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0,
     0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -58,7 +67,7 @@ tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]
 
-def square(x, y):
+def square(x, y, gate=""):
     "Draw square using path at (x, y)."
     path.up()
     path.goto(x, y)
@@ -110,6 +119,36 @@ def world():
                 path.goto(x + 10, y + 10)
                 path.dot(2, 'white')
 
+            if tile == 4:
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.shape(tgate)
+                path.resizemode('auto')
+                path.turtlesize(1)
+                path.stamp()
+
+            if tile == 5:
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.shape(sgate)
+                path.resizemode('auto')
+                path.turtlesize(1)
+                path.stamp()
+
+def check_collision(playerIndex, perform):
+    # perform is a dictionary of function
+
+    for key in perform.keys():
+        if tiles[playerIndex] == key:
+            tiles[playerIndex] = 2
+            perform[key]()
+            x = (playerIndex % 20) * 20 - 200
+            y = 180 - (playerIndex // 20) * 20
+            square(x, y)
+
+def inc_score(player):
+    state['score_' + player.lower()] += 1
+
 def move():
     "Move pacman and all ghosts."
 
@@ -117,7 +156,7 @@ def move():
     global past_input_b
 
     writer.undo()
-    writer.write(state['score'])
+    writer.write(str(state['score_a']) + " | " + str(state['score_b']))
 
     clear()
 
@@ -136,15 +175,17 @@ def move():
     index = offset(pacman)
     index2 = offset(pacman2)
 
-    if tiles[index] == 1:
-        tiles[index] = 2
-        state['score'] += 1
-        x = (index % 20) * 20 - 200
-        y = 180 - (index // 20) * 20
-        square(x, y)
+    check_collision(index, {1: lambda: inc_score('a'),
+                            4: lambda: simulation.add_gate(1, "t"),
+                            5: lambda: simulation.add_gate(1, "s")})
+
+    check_collision(index2, {1: lambda: inc_score('b'),
+                             4: lambda: simulation.add_gate(2, "t"),
+                             5: lambda: simulation.add_gate(2, "s")})
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
+    shape(player1)
     resizemode('auto')
     penup()
     turtlesize(0.1)
@@ -153,9 +194,10 @@ def move():
 
     up()
     goto(pacman2.x + 10, pacman2.y + 10)
+    shape(player2)
     resizemode('auto')
     penup()
-    turtlesize(0.1)
+    turtlesize(1)
     color('green')
     stamp()
 
@@ -212,7 +254,7 @@ hideturtle()
 tracer(False)
 writer.goto(160, 160)
 writer.color('white')
-writer.write(state['score'])
+writer.write(str(state['score_a']) + " | " + str(state['score_b']))
 listen()
 onkey(lambda: change(5, 0, "a"), 'Right')
 onkey(lambda: change(-5, 0, "a"), 'Left')

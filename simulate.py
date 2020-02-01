@@ -1,23 +1,39 @@
+from qiskit import QuantumCircuit, Aer, execute
+
 class quantum_simulation():
+
     def __init__(self):
+
         self.gates1 = []
-        self.gates2 = []        
+        self.gates2 = []
         self.qc = QuantumCircuit(2, 2)
         self.qc.h(0)
         self.qc.cx(0,1)
         self.output = []
+
     def load_gates(self):
+
         for i in range(len(self.gates1)):
             if self.gates1[i] == 'T':
                 self.qc.rx(np.pi/4,0)
             elif self.gates1[i] == 'S':
                 self.qc.rx(np.pi/2,0)
+
         for i in range(len(self.gates2)):
             if self.gates2[i] == 'T':
                 self.qc.rx(np.pi/4,1)
             elif self.gates2[i] == 'S':
                 self.qc.rx(np.pi/2,1)
+
+    def add_gate(self, player, gate):
+
+        if str(player) == "1":
+            self.gates1.append(gate.upper())
+        elif str(player) == "2":
+            self.gates2.append(gate.upper())
+
     def run(self):
+
         self.qc.measure([0,1],[1,0])
         # Execute the circuit on the qasm simulator
         job = execute(self.qc, simulator, shots=1000)
