@@ -1,6 +1,6 @@
 from qiskit import QuantumCircuit, Aer, execute
 
-class quantum_simulation():
+class QuantumSimulation():
 
     def __init__(self):
 
