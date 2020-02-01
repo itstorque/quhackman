@@ -1,0 +1,19 @@
+from qiskit import *
+import numpy as np
+from qiskit.visualization import plot_histogram
+simulator = Aer.get_backend('qasm_simulator')
+qc = QuantumCircuit(2, 2)
+qc.h(0)
+qc.cx(0,1)
+qc.rx(np.pi/4,0)
+qc.iden([1])
+qc.measure([0,1],[1,0])
+qc.draw()
+# Execute the circuit on the qasm simulator
+job = execute(qc, simulator, shots=1000)
+# Grab results from the job
+result = job.result()
+# Returns counts
+counts = result.get_counts(qc)
+print("\nTotal count for 00 and 11 are:",counts)
+plot_histogram(counts)
