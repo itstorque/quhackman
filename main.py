@@ -15,6 +15,18 @@ from turtle import *
 from freegames import floor, vector
 import simulate
 
+# Do you want to reveal states after collapse?
+revealState = None
+while revealState != "y" and revealState != "n":
+    revealState = input("Do you want to reveal states after collapse? [y/n] >   ")
+
+# Number of computer players
+artificialGhostCount = None
+while artificialGhostCount == None:
+    try: artificialGhostCount = int(input("How many AI ghosts do you want? [Integer] >   "))
+    except: pass
+
+
 past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
