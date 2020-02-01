@@ -22,12 +22,14 @@ HARDCODE_BOTH = False
 player1 = 'player.gif'
 tgate = 'gateT.gif'
 sgate = 'gateS.gif'
+zgate = 'gateZ.gif'
 register_shape(player1)
 register_shape(tgate)
 register_shape(sgate)
+register_shape(zgate)
 player2 = 'turtle'
 
-simulation = simulate.quantum_simulation()
+simulation = simulate.QuantumSimulation()
 
 resizemode('auto')
 
@@ -50,7 +52,7 @@ ghosts = [
 ]
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 6, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
@@ -108,7 +110,7 @@ def valid(point):
 def world():
     "Draw world using path."
     bgcolor('black')
-    path.color('blue')
+    path.color('white')
 
     for index in range(len(tiles)):
         tile = tiles[index]
@@ -135,6 +137,14 @@ def world():
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.shape(sgate)
+                path.resizemode('auto')
+                path.turtlesize(1)
+                path.stamp()
+
+            if tile == 6:
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.shape(zgate)
                 path.resizemode('auto')
                 path.turtlesize(1)
                 path.stamp()
@@ -201,11 +211,13 @@ def move():
 
     check_collision(index, {1: lambda: inc_score('a'),
                             4: lambda: simulation.add_gate(1, "t"),
-                            5: lambda: simulation.add_gate(1, "s")})
+                            5: lambda: simulation.add_gate(1, "s"),
+                            6: lambda: simulation.add_gate(1, "z")})
 
     check_collision(index2, {1: lambda: inc_score('b'),
                              4: lambda: simulation.add_gate(2, "t"),
-                             5: lambda: simulation.add_gate(2, "s")})
+                             5: lambda: simulation.add_gate(2, "s"),
+                             6: lambda: simulation.add_gate(2, "z")})
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
