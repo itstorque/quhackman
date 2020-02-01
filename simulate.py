@@ -13,17 +13,44 @@ class quantum_simulation():
 
     def load_gates(self):
 
+        count1 = 0
+
         for i in range(len(self.gates1)):
             if self.gates1[i] == 'T':
                 self.qc.rx(np.pi/4,0)
+                count1 += 1
             elif self.gates1[i] == 'S':
                 self.qc.rx(np.pi/2,0)
+                count1 += 1
+            elif self.gates1[i] == 'Z':
+                self.qc.x(0)
+                self.qc.x(1)
+                count1 += 1
+                count2 += 1
+
+        count2 = 0
 
         for i in range(len(self.gates2)):
             if self.gates2[i] == 'T':
                 self.qc.rx(np.pi/4,1)
+                count2 += 1
             elif self.gates2[i] == 'S':
                 self.qc.rx(np.pi/2,1)
+                count2 += 1
+            elif self.gates2[i] == 'Z':
+                self.qc.x(0)
+                self.qc.x(1)
+                count1 += 1
+                count2 += 1
+
+        # add the identity
+        if count2 < count1:
+            for i in range(count1-count2):
+                self.qc.iden(1)
+        elif count2 > count1:
+            for i in range(count2-count1):
+                self.qc.iden(0)
+
 
     def add_gate(self, player, gate):
 
