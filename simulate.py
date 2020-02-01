@@ -24,9 +24,7 @@ class QuantumSimulation():
                 count1 += 1
             elif self.gates1[i] == 'Z':
                 self.qc.x(0)
-                self.qc.x(1)
                 count1 += 1
-                count2 += 1
 
         count2 = 0
 
@@ -38,9 +36,7 @@ class QuantumSimulation():
                 self.qc.rx(np.pi/2,1)
                 count2 += 1
             elif self.gates2[i] == 'Z':
-                self.qc.x(0)
                 self.qc.x(1)
-                count1 += 1
                 count2 += 1
 
         # add the identity
