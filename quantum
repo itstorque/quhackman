@@ -1,19 +1,29 @@
-from qiskit import *
-import numpy as np
-from qiskit.visualization import plot_histogram
-simulator = Aer.get_backend('qasm_simulator')
-qc = QuantumCircuit(2, 2)
-qc.h(0)
-qc.cx(0,1)
-qc.rx(np.pi/4,0)
-qc.iden([1])
-qc.measure([0,1],[1,0])
-qc.draw()
-# Execute the circuit on the qasm simulator
-job = execute(qc, simulator, shots=1000)
-# Grab results from the job
-result = job.result()
-# Returns counts
-counts = result.get_counts(qc)
-print("\nTotal count for 00 and 11 are:",counts)
-plot_histogram(counts)
+class quantum_simulation():
+    def __init__(self):
+        self.gates1 = []
+        self.gates2 = []        
+        self.qc = QuantumCircuit(2, 2)
+        self.qc.h(0)
+        self.qc.cx(0,1)
+        self.output = []
+    def load_gates(self):
+        for i in range(len(self.gates1)):
+            if self.gates1[i] == 'T':
+                self.qc.rx(np.pi/4,0)
+            elif self.gates1[i] == 'S':
+                self.qc.rx(np.pi/2,0)
+        for i in range(len(self.gates2)):
+            if self.gates2[i] == 'T':
+                self.qc.rx(np.pi/4,1)
+            elif self.gates2[i] == 'S':
+                self.qc.rx(np.pi/2,1)
+    def run(self):
+        self.qc.measure([0,1],[1,0])
+        # Execute the circuit on the qasm simulator
+        job = execute(self.qc, simulator, shots=1000)
+        # Grab results from the job
+        result = job.result()
+        # Returns counts
+        counts = result.get_counts(self.qc)
+        print("\nTotal count for 00 and 11 are:",counts)
+        self.output = counts
