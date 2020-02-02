@@ -96,7 +96,7 @@ ghosts = [
     [vector(-180, -160), vector(5, 0)],
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(0, 5)],
-][:artificialGhostCount-1]
+][:artificialGhostCount]
 
 blochFig1 = Turtle()
 blochFig2 = Turtle()
