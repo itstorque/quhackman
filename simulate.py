@@ -15,6 +15,7 @@ class QuantumSimulation():
         self.qc.cx(0,1)
         self.output = []
         self.shots_num = 1
+        self.result = None
 
     def load_gates(self):
 
@@ -71,3 +72,26 @@ class QuantumSimulation():
         counts = result.get_counts(self.qc)
         print("\nTotal count for 00 and 11 are:",counts)
         self.output = counts
+
+    def measure(self, ra, rb, player_number):
+
+        self.qc = QuantumCircuit(2, 1)
+
+        self.qc.h(0)
+        self.qc.cx(0,1)
+
+        self.qc.rx(ra,0)
+        self.qc.rx(rb,0)
+        self.qc.measure([player_number-1],[0])
+
+        job = execute(self.qc, simulator, shots=1)
+        result = job.result()
+
+        counts = result.get_counts(self.qc)
+        counts.setdefault('0', 0)
+        counts.setdefault('1', 0)
+
+        zero_counts = counts['0']
+        one_counts = counts['1']
+
+        self.did_win = (player_number, zero_counts > one_counts)
