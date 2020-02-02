@@ -321,7 +321,7 @@ def move():
         blochFig1.clear()
         blochFig2.clear()
         path.up()
-        path.goto(-100,0)
+        path.goto(-10,0)
         if simulation.did_win == (1, True) or simulation.did_win == (2, False):
             path.shape(rwin)
         else:
