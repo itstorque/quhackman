@@ -2,7 +2,8 @@
     Simulation file for Qu[H]ack[Wo]man
 """
 
-from qiskit import QuantumCircuit, Aer, execute
+from qiskit import QuantumCircuit, Aer, execute, QuantumRegister, ClassicalRegister
+import numpy as np
 
 class QuantumSimulation():
 
@@ -95,3 +96,41 @@ class QuantumSimulation():
         one_counts = counts['1']
 
         self.did_win = (player_number, zero_counts > one_counts)
+
+
+class QuantumRandomizer():
+
+    def __init__(self):
+
+        self.rng_n_qubits = 2
+
+    def random_num_generator(self):
+        q = QuantumRegister(self.rng_n_qubits, 'q')
+        circ = QuantumCircuit(q)
+        c0 = ClassicalRegister(2, 'c0')
+        circ.add_register(c0)
+
+        for i in range(self.rng_n_qubits):
+            circ.h(q[i])
+
+        for i in range(self.rng_n_qubits):
+            circ.measure(q[i], c0)
+
+        backend = Aer.get_backend('statevector_simulator')
+        job = execute(circ, backend)
+
+        result = job.result()
+        output = result.get_statevector(circ, decimals=5)
+
+        n1 = 0
+        n2 = 0
+        n3 = 0
+        for i in range( output.size ):
+            if abs(output[i]) != 0:
+                n1 = i
+                n2 = np.real(output[i])
+                n3 = np.imag(output[i])
+
+        y = n1+n2+n3-1
+
+        return y
