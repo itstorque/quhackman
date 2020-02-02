@@ -1,5 +1,5 @@
 
-# QuhacMan: a Quantum Two-player PacMan Game***
+# QuhacMan: a Quantum Two-player PacMan Game
 
 Tareq El Dandachi, Matthew Baldwin, Qichen Song, Haozhe Wang
 
@@ -9,11 +9,11 @@ The development of quantum computing has offered revolutionary scope for many tr
 
 
 
-1. The initial status is entangled;
-2. The initial state is superposed;
-3. Player strategy is quantum.
+1. The initial status is entangled
+2. The initial state is superposed
+3. Player strategy is quantum
 
-These features indicate that in quantum scenario, the definition of win and lose in a game changes fundamentally.
+These features indicate that in a quantum scenario, the definition of win and lose in a game changes fundamentally as a function of the qubit phase and rotation and the collapse of that function upon measurement.
 
 In this project, we propose a quantum game, which is a modified version of the multi-player PacMan game. The game is a validation of quantum game theory and test quantum win strategies.
 
@@ -68,13 +68,12 @@ The GitHub repository link is [https://github.com/tareqdandachi/quhackman](https
 [2]Quantum Game Theory, Wikipedia. [https://en.wikipedia.org/wiki/Quantum_game_theory](https://en.wikipedia.org/wiki/Quantum_game_theory)
 
 ## ToDo:
-
+### Things we would wanna fix/implement but didn't have enough time to do
 
 
 *   Graphics
 *   Randomized gate creation over time (Rx, H, switch, measure)
 *   No measure gates before player reveal
-*   ~~Ghost collision reset~~
 *   Game end on measure block collection
 *   Final winner determination
 
