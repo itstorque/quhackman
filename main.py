@@ -367,15 +367,15 @@ def move():
 
     if(pacman_mult != 1 or pacman2_mult != 1):
         check_collision(index, {1: lambda: inc_score('a'),
-                                4: lambda: simulation.add_gate(1, "t"),
-                                5: lambda: simulation.add_gate(1, "s"),
-                                6: lambda: simulation.add_gate(1, "z"),
+                                4: lambda: simulation.add_game_gate(1, "t"),
+                                5: lambda: simulation.add_game_gate(1, "s"),
+                                6: lambda: simulation.add_game_gate(1, "z"),
                                 7: lambda: simulation.measure(-state["score_a"]*5, -state["score_b"]*5, 1)})
 
         check_collision(index2, {1: lambda: inc_score('b'),
-                                 4: lambda: simulation.add_gate(2, "t"),
-                                 5: lambda: simulation.add_gate(2, "s"),
-                                 6: lambda: simulation.add_gate(2, "z"),
+                                 4: lambda: simulation.add_game_gate(2, "t"),
+                                 5: lambda: simulation.add_game_gate(2, "s"),
+                                 6: lambda: simulation.add_game_gate(2, "z"),
                                  7: lambda: simulation.measure(-state["score_a"]*5, -state["score_b"]*5, 2)})
     else:
         check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
