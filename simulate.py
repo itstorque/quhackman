@@ -105,11 +105,11 @@ class QuantumSimulation():
 
         for i in range(len(self.game_gates2)):
             if self.game_gates2[i] == 'T':
-                self.qc.rx(np.pi/4,1)
+                self.qc.rx(np.pi/4,0)
             elif self.game_gates2[i] == 'S':
-                self.qc.rx(np.pi/2,1)
+                self.qc.rx(np.pi/2,0)
             elif self.game_gates2[i] == 'Z':
-                self.qc.x(1)
+                self.qc.x(0)
 
         # self.qc.h(0)
         # self.qc.cx(0,1)
