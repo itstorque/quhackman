@@ -54,7 +54,7 @@ resizemode('auto')
 
 state = {'score_a': 0, 'score_b': 0}
 path = Turtle(visible=False)
-writer = Turtle(visible=False)
+# writer = Turtle(visible=False)
 
 aim = vector(5, 0)
 aim2 = vector(-5, 0)
@@ -274,16 +274,15 @@ def move():
     "Move pacman and all ghosts."
     global past_input_a
     global past_input_b
-    
+
     global pacman_mult
     global pacman2_mult
-    
-    print('mults',pacman_mult,pacman2_mult)
-    writer.undo()
-    writer.write(str(state['score_a']) + " | " + str(state['score_b']))
+
+    # writer.undo()
+    # writer.write(str(state['score_a']) + " | " + str(state['score_b']))
     end_time = time.time()
     time_length = end_time - start_time
-#    print(time_length)
+
     clear()
 
     if valid(pacman + aim):
@@ -318,32 +317,36 @@ def move():
 
     index = offset(pacman)
     index2 = offset(pacman2)
-    
+
     if(pacman_mult != 1 or pacman2_mult != 1):
         check_collision(index, {1: lambda: inc_score('a'),
                                 4: lambda: simulation.add_gate(1, "t"),
                                 5: lambda: simulation.add_gate(1, "s"),
-                                6: lambda: simulation.add_gate(1, "z")})
+                                6: lambda: simulation.add_gate(1, "z"),
+                                7: lambda: print("SIM A>", state, done())})
 
         check_collision(index2, {1: lambda: inc_score('b'),
                                  4: lambda: simulation.add_gate(2, "t"),
                                  5: lambda: simulation.add_gate(2, "s"),
-                                 6: lambda: simulation.add_gate(2, "z")})
+                                 6: lambda: simulation.add_gate(2, "z"),
+                                 7: lambda: print("SIM B>", state, done())})
     else:
         check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
                                 5: lambda: simulation.add_gate(1, "s"),
-                                6: lambda: simulation.add_gate(1, "z")})
+                                6: lambda: simulation.add_gate(1, "z"),
+                                7: lambda: print("SIM A>", state, done())})
 
         check_collision(index2, {4: lambda: simulation.add_gate(2, "t"),
                                  5: lambda: simulation.add_gate(2, "s"),
-                                 6: lambda: simulation.add_gate(2, "z")})    
+                                 6: lambda: simulation.add_gate(2, "z"),
+                                 7: lambda: print("SIM B>", state, done())})
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
     shape(player1)
     resizemode('auto')
     penup()
-    turtlesize(0.1)
+    turtlesize(1)
     color('green')
     stamp()
 
@@ -352,7 +355,7 @@ def move():
     shape(player2)
     resizemode('auto')
     penup()
-    turtlesize(1)
+    turtlesize(1.5)
     color('green')
     stamp()
 
@@ -385,28 +388,21 @@ def move():
 
     update()
 
-#    for point, course in ghosts:
-#        if abs(pacman - point) < 20:
-#            return
-#        if abs(pacman2 - point) < 20:
-#            return
-        
-    print(time_length)
     gate_collect_time = 5.
-        
+
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
-        
+
         simulation.run()
         output_sim = simulation.output
-#        print(output_sim['00'])
+
         if output_sim.get('00',0) == 1:
             pacman_mult = 1.
-            pacman2_mult = 2.
-            
+            pacman2_mult = 1.5
+
         if output_sim.get('11',0) == 1:
-            pacman_mult = 2.
+            pacman_mult = 1.5
             pacman2_mult = 1.
-            
+
         for index in range(len(tiles)):
             tile = tiles[index]
             if tile > 0:
@@ -447,9 +443,9 @@ setup(420, 420, 370, 0)
 start_time = time.time()
 hideturtle()
 tracer(False)
-writer.goto(160, 160)
-writer.color('white')
-writer.write(str(state['score_a']) + " | " + str(state['score_b']), font=("Arial", 16, "normal"))
+# writer.goto(160, 160)
+# writer.color('white')
+# writer.write(str(state['score_a']) + " | " + str(state['score_b']), font=("Arial", 16, "normal"))
 listen()
 onkey(lambda: change(5, 0, "a"), 'Right')
 onkey(lambda: change(-5, 0, "a"), 'Left')
