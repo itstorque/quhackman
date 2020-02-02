@@ -14,6 +14,7 @@ from random import choice
 from turtle import *
 from freegames import floor, vector
 import simulate
+import datetime #REMOVE THIS
 
 # Do you want to reveal states after collapse?
 revealState = None
@@ -44,7 +45,7 @@ register_shape(zgate)
 player2 = 'turtle'
 
 screensize(800, 600)
-setworldcoordinates(-160, -160, 160, 160)
+setworldcoordinates(-190, -170, 150, 170)
 
 simulation = simulate.QuantumSimulation()
 
@@ -53,14 +54,18 @@ resizemode('auto')
 state = {'score_a': 0, 'score_b': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
+
 aim = vector(5, 0)
 aim2 = vector(-5, 0)
+
 top = vector(-40,175)
 bottom = vector(-40,-175)
 right = vector(115,0)
 left = vector(-195,0)
+
 pacman = vector(-40, -80)
 pacman2 = vector(-80, -80)
+
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
@@ -71,6 +76,10 @@ ghosts = [
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(0, 5)],
 ][:artificialGhostCount-1]
+
+blochFig1 = Turtle()
+blochFig2 = Turtle()
+
 if artificialGhostCount == 0: ghosts = []
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -185,6 +194,54 @@ def check_collision(playerIndex, perform):
 def inc_score(player):
     state['score_' + player.lower()] += 1
 
+def bloch1():
+    blochFig1.clear()
+    blochFig1.reset()
+    blochFig1.shape("arrow")
+
+    currentMinute = datetime.datetime.now().second
+
+    blochFig1.penup()
+    blochFig1.goto(230,-70)
+    blochFig1.pendown()
+    blochFig1.color("blue")
+    blochFig1.circle(70, steps=50)
+
+    blochFig1.color("red")
+
+    blochFig1.penup()
+    blochFig1.goto(230,0)
+    # blochFig1.setheading(90) # Point to the top - towards 0 state
+    blochFig1.setheading(0)
+    blochFig1.right(-state["score_a"]*360/60)
+    blochFig1.pendown()
+    blochFig1.forward(60)
+
+    blochFig1.getscreen().update()
+
+def bloch2():
+    blochFig2.clear()
+    blochFig2.reset()
+    blochFig2.shape("arrow")
+
+    blochFig2.penup()
+    blochFig2.goto(-290,-70)
+    blochFig2.pendown()
+    blochFig2.color("blue")
+    blochFig2.circle(70, steps=50)
+
+    blochFig2.color("red")
+
+    blochFig2.penup()
+    blochFig2.goto(-290,0)
+    # blochFig2.setheading(90) # Point to the top - towards 0 state
+    blochFig2.setheading(0)
+    blochFig2.right(-state["score_b"]*360/60)
+    blochFig2.pendown()
+    blochFig2.forward(60)
+
+    blochFig2.getscreen().update()
+
 def move():
     "Move pacman and all ghosts."
 
@@ -284,6 +341,9 @@ def move():
             return
         if abs(pacman2 - point) < 20:
             return
+
+    bloch1()
+    bloch2()
 
     ontimer(move, 100)
 
