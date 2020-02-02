@@ -14,7 +14,7 @@ class QuantumSimulation():
         self.qc.h(0)
         self.qc.cx(0,1)
         self.output = []
-        self.shots_num = 1000
+        self.shots_num = 1
 
     def load_gates(self):
 
@@ -61,7 +61,7 @@ class QuantumSimulation():
             self.gates2.append(gate.upper())
 
     def run(self):
-
+        simulator = Aer.get_backend('qasm_simulator')
         self.qc.measure([0,1],[1,0])
         # Execute the circuit on the qasm simulator
         job = execute(self.qc, simulator, shots=self.shots_num)

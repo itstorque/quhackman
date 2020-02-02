@@ -1,7 +1,7 @@
 """
     Qu[H]ackMan main python file for game logic, a Quantum PackMan game made for MIT/iQuHack.
 """
-
+import time
 from random import choice
 from turtle import *
 from freegames import floor, vector
@@ -28,6 +28,8 @@ HARDCODE_BOTH = False
 player1 = 'player.gif'
 register_shape(player1)
 player2 = 'turtle'
+pacman_mult = 1
+pacman2_mult = 1
 
 tgate = 'gateT.gif'
 sgate = 'gateS.gif'
@@ -57,10 +59,10 @@ writer = Turtle(visible=False)
 aim = vector(5, 0)
 aim2 = vector(-5, 0)
 
-top = vector(-40,175)
-bottom = vector(-40,-175)
-right = vector(115,0)
-left = vector(-195,0)
+top = [vector(-40,170),vector(-40,175)]
+bottom = [vector(-40,-170),vector(-40,-175),]
+right = [vector(110,0),vector(115,0)]
+left = [vector(-190,0),vector(-195,0)]
 
 pacman = vector(-40, -80)
 pacman2 = vector(-80, -80)
@@ -150,12 +152,7 @@ def world():
             y = 180 - (index // 20) * 20
             square(x, y)
 
-            if tile == 1:
-                path.up()
-                path.goto(x + 10, y + 10)
-                path.dot(4, 'black')
-
-            elif tile == 4:
+            if tile == 4:
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.shape(tgate)
@@ -275,40 +272,43 @@ def bloch2():
 
 def move():
     "Move pacman and all ghosts."
-
     global past_input_a
     global past_input_b
-
+    
+    global pacman_mult
+    global pacman2_mult
+    
+    print('mults',pacman_mult,pacman2_mult)
     writer.undo()
-    writer.write(str(state['score_a']) + " | " + str(state['score_b']), font=("Arial", 16, "normal"))
-
+    writer.write(str(state['score_a']) + " | " + str(state['score_b']))
+    end_time = time.time()
+    time_length = end_time - start_time
+#    print(time_length)
     clear()
 
     if valid(pacman + aim):
-#        print('pacman bef',pacman)
-        if(pacman == top and aim == vector(0,5)):
-            pacman.move(bottom-top)
-        elif(pacman == bottom and aim == vector(0,-5)):
-            pacman.move(top-bottom)
-        elif(pacman == left and aim == vector(-5,0)):
-            pacman.move(right-left)
-        elif(pacman == right and aim == vector(5,0)):
-            pacman.move(left-right)
+        if(pacman in top and aim == vector(0,5)):
+            pacman.move(bottom[1]-top[1])
+        elif(pacman in bottom and aim == vector(0,-5)):
+            pacman.move(top[1]-bottom[1])
+        elif(pacman in left and aim == vector(-5,0)):
+            pacman.move(right[1]-left[1])
+        elif(pacman in right and aim == vector(5,0)):
+            pacman.move(left[1]-right[1])
         else:
-            pacman.move(aim)
-#        print('pacman aft', pacman)
+            pacman.move(pacman_mult*aim)
 
     if valid(pacman2 + aim2):
-        if(pacman2 == top and aim2 == vector(0,5)):
-            pacman2.move(bottom-top)
-        elif(pacman2 == bottom and aim2 == vector(0,-5)):
-            pacman2.move(top-bottom)
-        elif(pacman2 == left and aim2 == vector(-5,0)):
-            pacman2.move(right-left)
-        elif(pacman2 == right and aim2 == vector(5,0)):
-            pacman2.move(left-right)
+        if(pacman2 in top and aim2 == vector(0,5)):
+            pacman2.move(bottom[1]-top[1])
+        elif(pacman2 in bottom and aim2 == vector(0,-5)):
+            pacman2.move(top[1]-bottom[1])
+        elif(pacman2 in left and aim2 == vector(-5,0)):
+            pacman2.move(right[1]-left[1])
+        elif(pacman2 in right and aim2 == vector(5,0)):
+            pacman2.move(left[1]-right[1])
         else:
-            pacman2.move(aim2)
+            pacman2.move(pacman2_mult*aim2)
 
     if past_input_a != None:
         change(*past_input_a, "a", save=False)
@@ -318,25 +318,32 @@ def move():
 
     index = offset(pacman)
     index2 = offset(pacman2)
+    
+    if(pacman_mult != 1 or pacman2_mult != 1):
+        check_collision(index, {1: lambda: inc_score('a'),
+                                4: lambda: simulation.add_gate(1, "t"),
+                                5: lambda: simulation.add_gate(1, "s"),
+                                6: lambda: simulation.add_gate(1, "z")})
 
-    check_collision(index, {1: lambda: inc_score('a'),
-                            4: lambda: simulation.add_gate(1, "t"),
-                            5: lambda: simulation.add_gate(1, "s"),
-                            6: lambda: simulation.add_gate(1, "z"),
-                            7: lambda: print("SIM A>", state, done())})
+        check_collision(index2, {1: lambda: inc_score('b'),
+                                 4: lambda: simulation.add_gate(2, "t"),
+                                 5: lambda: simulation.add_gate(2, "s"),
+                                 6: lambda: simulation.add_gate(2, "z")})
+    else:
+        check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
+                                5: lambda: simulation.add_gate(1, "s"),
+                                6: lambda: simulation.add_gate(1, "z")})
 
-    check_collision(index2, {1: lambda: inc_score('b'),
-                             4: lambda: simulation.add_gate(2, "t"),
-                             5: lambda: simulation.add_gate(2, "s"),
-                             6: lambda: simulation.add_gate(1, "z"),
-                             7: lambda: print("SIM B>", state, done())})
+        check_collision(index2, {4: lambda: simulation.add_gate(2, "t"),
+                                 5: lambda: simulation.add_gate(2, "s"),
+                                 6: lambda: simulation.add_gate(2, "z")})    
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
     shape(player1)
     resizemode('auto')
     penup()
-    turtlesize(1)
+    turtlesize(0.1)
     color('green')
     stamp()
 
@@ -345,13 +352,22 @@ def move():
     shape(player2)
     resizemode('auto')
     penup()
-    turtlesize(1.5)
+    turtlesize(1)
     color('green')
     stamp()
 
     for point, course in ghosts:
         if valid(point + course):
-            point.move(course)
+            if(point == top and course == vector(0,5)):
+                point.move(bottom-top)
+            elif(point == bottom and course == vector(0,-5)):
+                point.move(top-bottom)
+            elif(point == left and course == vector(-5,0)):
+                point.move(right-left)
+            elif(point == right and course == vector(5,0)):
+                point.move(left-right)
+            else:
+                point.move(course)
         else:
             options = [
                 vector(5, 0),
@@ -369,11 +385,38 @@ def move():
 
     update()
 
-    for point, course in ghosts:
-        if abs(pacman - point) < 20:
-            return
-        if abs(pacman2 - point) < 20:
-            return
+#    for point, course in ghosts:
+#        if abs(pacman - point) < 20:
+#            return
+#        if abs(pacman2 - point) < 20:
+#            return
+        
+    print(time_length)
+    gate_collect_time = 5.
+        
+    if time_length > gate_collect_time and time_length < gate_collect_time + .2:
+        
+        simulation.run()
+        output_sim = simulation.output
+#        print(output_sim['00'])
+        if output_sim.get('00',0) == 1:
+            pacman_mult = 1.
+            pacman2_mult = 2.
+            
+        if output_sim.get('11',0) == 1:
+            pacman_mult = 2.
+            pacman2_mult = 1.
+            
+        for index in range(len(tiles)):
+            tile = tiles[index]
+            if tile > 0:
+                x = (index % 20) * 20 - 200
+                y = 180 - (index // 20) * 20
+                square(x, y)
+                if tile == 1:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.dot(5, 'purple')
 
     bloch1()
     bloch2()
@@ -401,6 +444,7 @@ def change(x, y, both=True, save=True):
         past_input_b = None
 
 setup(420, 420, 370, 0)
+start_time = time.time()
 hideturtle()
 tracer(False)
 writer.goto(160, 160)
