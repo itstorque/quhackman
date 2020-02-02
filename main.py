@@ -14,7 +14,6 @@ from random import choice
 from turtle import *
 from freegames import floor, vector
 import simulate
-import datetime #REMOVE THIS
 
 # Do you want to reveal states after collapse?
 revealState = None
@@ -38,10 +37,14 @@ player1 = 'player.gif'
 tgate = 'gateT.gif'
 sgate = 'gateS.gif'
 zgate = 'gateZ.gif'
+winstate = 'win_state.gif'
+losestate = 'lose_state.gif'
 register_shape(player1)
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
+register_shape(winstate)
+register_shape(losestate)
 player2 = 'turtle'
 
 screensize(800, 600)
@@ -197,12 +200,23 @@ def inc_score(player):
 def bloch1():
     blochFig1.clear()
     blochFig1.reset()
-    blochFig1.shape("arrow")
-
-    currentMinute = datetime.datetime.now().second
 
     blochFig1.penup()
-    blochFig1.goto(230,-70)
+    # blochFig1.color("white")
+    # blochFig1.goto(210,80)
+    # blochFig1.write("⎪ win 〉", font=("Arial", 16, "normal"))
+    # blochFig1.goto(210,-90)
+    # blochFig1.write("⎪ lose 〉", font=("Arial", 16, "normal"))
+    blochFig1.goto(235,80)
+    blochFig1.shape(winstate)
+    blochFig1.stamp()
+
+    blochFig1.goto(235,-85)
+    blochFig1.shape(losestate)
+    blochFig1.stamp()
+
+    blochFig1.goto(235,-70)
+    blochFig1.shape("arrow")
     blochFig1.pendown()
     blochFig1.color("blue")
     blochFig1.circle(70, steps=50)
@@ -210,10 +224,10 @@ def bloch1():
     blochFig1.color("red")
 
     blochFig1.penup()
-    blochFig1.goto(230,0)
+    blochFig1.goto(235,0)
     # blochFig1.setheading(90) # Point to the top - towards 0 state
     blochFig1.setheading(0)
-    blochFig1.right(-state["score_a"]*360/60)
+    blochFig1.right(-state["score_a"]*360/72)
     blochFig1.pendown()
     blochFig1.forward(60)
 
@@ -222,9 +236,22 @@ def bloch1():
 def bloch2():
     blochFig2.clear()
     blochFig2.reset()
-    blochFig2.shape("arrow")
 
     blochFig2.penup()
+    # blochFig2.color("white")
+    # blochFig2.goto(-300,80)
+    # blochFig2.write("⎪ win 〉", font=("Arial", 16, "normal"))
+    # blochFig2.goto(-300,-90)
+    # blochFig2.write("⎪ lose 〉", font=("Arial", 16, "normal"))
+    blochFig2.goto(-290, 80)
+    blochFig2.shape(winstate)
+    blochFig2.stamp()
+
+    blochFig2.goto(-290,-85)
+    blochFig2.shape(losestate)
+    blochFig2.stamp()
+
+    blochFig2.shape("arrow")
     blochFig2.goto(-290,-70)
     blochFig2.pendown()
     blochFig2.color("blue")
@@ -236,7 +263,7 @@ def bloch2():
     blochFig2.goto(-290,0)
     # blochFig2.setheading(90) # Point to the top - towards 0 state
     blochFig2.setheading(0)
-    blochFig2.right(-state["score_b"]*360/60)
+    blochFig2.right(-state["score_b"]*360/72)
     blochFig2.pendown()
     blochFig2.forward(60)
 
