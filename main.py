@@ -27,29 +27,29 @@ past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
 walls = True
-
-playerFast = 'playerFast.gif'
+directory = 'C:/Users/Matt/Documents/GitHub/quhackman/sprites/'
+playerFast = directory + 'playerFast.gif'
 register_shape(playerFast)
-playerSuperpos = 'playerSuperpos.gif'
+playerSuperpos = directory + 'playerSuperpos.gif'
 register_shape(playerSuperpos)
-playerSlow = 'playerSlow.gif'
+playerSlow = directory + 'playerSlow.gif'
 register_shape(playerSlow)
 pacman_mult = 1
 pacman2_mult = 1
 
 player1, player2 = playerSuperpos, playerSuperpos
 
-tgate = 'gateT.gif'
-sgate = 'gateS.gif'
-zgate = 'gateZ.gif'
-measure = 'measure.gif'
+tgate = directory + 'gateT.gif'
+sgate = directory + 'gateS.gif'
+zgate = directory + 'gateZ.gif'
+measure = directory + 'measure.gif'
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
 register_shape(measure)
 
-winstate = 'win_state.gif'
-losestate = 'lose_state.gif'
+winstate = directory + 'win_state.gif'
+losestate = directory + 'lose_state.gif'
 register_shape(winstate)
 register_shape(losestate)
 
@@ -496,7 +496,7 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'red')
-                    
+#    global count_random            
     if time_length > gate_collect_time:
         gate_choice = randomizer.random_num_generator()
         gates = [sgate,tgate,measure,zgate]
@@ -507,10 +507,11 @@ def move():
             y = 180 - (index // 20) * 20
             path.up()
             path.goto(x + 10, y + 10)
-            path.shape(gates[gate_choice])
+            path.shape(gates[int(gate_choice)])
             path.resizemode('auto')
             path.turtlesize(1)
             path.stamp()
+#        count_random += 1
     bloch1()
     bloch2()
 
