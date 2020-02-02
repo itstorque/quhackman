@@ -24,20 +24,24 @@ while artificialGhostCount == None:
 past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
-# shape("turtle")
+
 player1 = 'player.gif'
+register_shape(player1)
+player2 = 'turtle'
+
 tgate = 'gateT.gif'
 sgate = 'gateS.gif'
 zgate = 'gateZ.gif'
-winstate = 'win_state.gif'
-losestate = 'lose_state.gif'
-register_shape(player1)
+measure = 'measure.gif'
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
+register_shape(measure)
+
+winstate = 'win_state.gif'
+losestate = 'lose_state.gif'
 register_shape(winstate)
 register_shape(losestate)
-player2 = 'turtle'
 
 screensize(800, 600)
 setworldcoordinates(-190, -170, 150, 170)
@@ -80,7 +84,7 @@ tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 6, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0,
-    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+    0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0,
     0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
@@ -151,7 +155,7 @@ def world():
                 path.goto(x + 10, y + 10)
                 path.dot(4, 'black')
 
-            if tile == 4:
+            elif tile == 4:
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.shape(tgate)
@@ -159,7 +163,7 @@ def world():
                 path.turtlesize(1)
                 path.stamp()
 
-            if tile == 5:
+            elif tile == 5:
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.shape(sgate)
@@ -167,10 +171,18 @@ def world():
                 path.turtlesize(1)
                 path.stamp()
 
-            if tile == 6:
+            elif tile == 6:
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.shape(zgate)
+                path.resizemode('auto')
+                path.turtlesize(1)
+                path.stamp()
+
+            elif tile == 7:
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.shape(measure)
                 path.resizemode('auto')
                 path.turtlesize(1)
                 path.stamp()
@@ -310,12 +322,14 @@ def move():
     check_collision(index, {1: lambda: inc_score('a'),
                             4: lambda: simulation.add_gate(1, "t"),
                             5: lambda: simulation.add_gate(1, "s"),
-                            6: lambda: simulation.add_gate(1, "z")})
+                            6: lambda: simulation.add_gate(1, "z"),
+                            7: lambda: print("SIM A>", state, done())})
 
     check_collision(index2, {1: lambda: inc_score('b'),
                              4: lambda: simulation.add_gate(2, "t"),
                              5: lambda: simulation.add_gate(2, "s"),
-                             6: lambda: simulation.add_gate(2, "z")})
+                             6: lambda: simulation.add_gate(1, "z"),
+                             7: lambda: print("SIM B>", state, done())})
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
