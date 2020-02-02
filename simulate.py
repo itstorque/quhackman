@@ -4,6 +4,7 @@
 
 from qiskit import QuantumCircuit, Aer, execute, QuantumRegister, ClassicalRegister
 import numpy as np
+import math
 
 class QuantumSimulation():
 
@@ -17,6 +18,7 @@ class QuantumSimulation():
         self.output = []
         self.shots_num = 1
         self.result = None
+        self.did_win = None
 
     def load_gates(self):
 
@@ -75,15 +77,25 @@ class QuantumSimulation():
         self.output = counts
 
     def measure(self, ra, rb, player_number):
+        # ra and rb are in degrees
 
-        self.qc = QuantumCircuit(2, 1)
+        print("SELF", player_number, ra, rb)
 
-        self.qc.h(0)
-        self.qc.cx(0,1)
+        ra, rb = ra * math.pi/180, rb * math.pi/180
 
-        self.qc.rx(ra,0)
-        self.qc.rx(rb,0)
-        self.qc.measure([player_number-1],[0])
+        self.qc = QuantumCircuit(1, 1)
+        simulator = Aer.get_backend('qasm_simulator')
+
+        # self.qc.h(0)
+        # self.qc.cx(0,1)
+        # self.qc.barrier()
+        # self.qc.x(1)
+
+        self.qc.rx(math.pi*0.5+(ra if player_number == 1 else rb),0)
+        # self.qc.rx(rb,1)
+        self.qc.measure([0],[0])
+
+        print(self.qc.draw())
 
         job = execute(self.qc, simulator, shots=1)
         result = job.result()
