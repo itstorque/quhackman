@@ -507,7 +507,7 @@ def move():
         gates = [sgate,tgate,measure,zgate]
 
         index = random.randint(1,399)
-        if int(round(time_length)) % 15 == 0 and tiles[index] == 1:
+        if int(round(time_length,0)) % 15 == 0 and tiles[index] == 1:
             x = (index % 20) * 20 - 200
             y = 180 - (index // 20) * 20
             path.up()
