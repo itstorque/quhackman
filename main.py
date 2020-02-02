@@ -27,29 +27,34 @@ past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
 walls = True
-directory = 'C:/Users/Matt/Documents/GitHub/quhackman/sprites/'
-playerFast = directory + 'playerFast.gif'
+
+playerFast = 'sprites/playerFast.gif'
 register_shape(playerFast)
-playerSuperpos = directory + 'playerSuperpos.gif'
+
+playerSuperpos = 'sprites/playerSuperpos.gif'
 register_shape(playerSuperpos)
-playerSlow = directory + 'playerSlow.gif'
+
+playerSlow = 'sprites/playerSlow.gif'
 register_shape(playerSlow)
+
 pacman_mult = 1
 pacman2_mult = 1
 
 player1, player2 = playerSuperpos, playerSuperpos
 
-tgate = directory + 'gateT.gif'
-sgate = directory + 'gateS.gif'
-zgate = directory + 'gateZ.gif'
-measure = directory + 'measure.gif'
+tgate = 'sprites/gateT.gif'
+sgate = 'sprites/gateS.gif'
+zgate = 'sprites/gateZ.gif'
+measure = 'sprites/measure.gif'
+
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
 register_shape(measure)
 
-winstate = directory + 'win_state.gif'
-losestate = directory + 'lose_state.gif'
+winstate = 'sprites/win_state.gif'
+losestate = 'sprites/lose_state.gif'
+
 register_shape(winstate)
 register_shape(losestate)
 
@@ -209,14 +214,6 @@ def world():
                 path.turtlesize(1)
                 path.stamp()
 
-            elif tile == 7:
-                path.up()
-                path.goto(x + 10, y + 10)
-                path.shape(measure)
-                path.resizemode('auto')
-                path.turtlesize(1)
-                path.stamp()
-
     walls = False
 
 def check_collision(playerIndex, perform):
@@ -307,7 +304,7 @@ def bloch2():
 
 def move():
     "Move pacman and all ghosts."
-    
+
     global past_input_a, past_input_b
     global pacman_mult, pacman2_mult
     global player1, player2
@@ -325,7 +322,7 @@ def move():
     clear()
     print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
     print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
-    
+
     if valid(pacman + aim):
         if(pacman in top and aim == vector(0,5)):
             pacman.move(bottom[1]-top[1])
@@ -340,7 +337,7 @@ def move():
                 pacman.move(aim)
             else:
                 pacman.move(pacman_mult*aim)
-                
+
     if valid(pacman2 + aim2):
         if(pacman2 in top and aim2 == vector(0,5)):
             pacman2.move(bottom[1]-top[1])
@@ -367,15 +364,15 @@ def move():
 
     if(pacman_mult != 1 or pacman2_mult != 1):
         check_collision(index, {1: lambda: inc_score('a'),
-                                4: lambda: simulation.add_gate(1, "t"),
-                                5: lambda: simulation.add_gate(1, "s"),
-                                6: lambda: simulation.add_gate(1, "z"),
+                                4: lambda: simulation.add_game_gate(1, "t"),
+                                5: lambda: simulation.add_game_gate(1, "s"),
+                                6: lambda: simulation.add_game_gate(1, "z"),
                                 7: lambda: simulation.measure(-state["score_a"]*5, -state["score_b"]*5, 1)})
 
         check_collision(index2, {1: lambda: inc_score('b'),
-                                 4: lambda: simulation.add_gate(2, "t"),
-                                 5: lambda: simulation.add_gate(2, "s"),
-                                 6: lambda: simulation.add_gate(2, "z"),
+                                 4: lambda: simulation.add_game_gate(2, "t"),
+                                 5: lambda: simulation.add_game_gate(2, "s"),
+                                 6: lambda: simulation.add_game_gate(2, "z"),
                                  7: lambda: simulation.measure(-state["score_a"]*5, -state["score_b"]*5, 2)})
     else:
         check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
@@ -448,9 +445,9 @@ def move():
             color('green')
             stamp()
             break
-            
+
         if abs(pacman2 - point) < 20:
-            
+
             if time_length > gate_collect_time:
                 state['score_a'] += 10
                 state['score_b'] -= 10
@@ -464,7 +461,7 @@ def move():
             color('green')
             stamp()
             break
-            
+
     update()
 
     global count_time
@@ -496,11 +493,19 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'red')
-#    global count_random            
+                    
+                elif tile == 7:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.shape(measure)
+                    path.resizemode('auto')
+                    path.turtlesize(1)
+                    path.stamp()
+                
     if time_length > gate_collect_time:
         gate_choice = randomizer.random_num_generator()
         gates = [sgate,tgate,measure,zgate]
-        
+
         index = random.randint(1,399)
         if int(round(time_length)) % 15 == 0 and tiles[index] == 1:
             x = (index % 20) * 20 - 200
@@ -537,7 +542,7 @@ def change(x, y, both=True, save=True):
         aim2.y = y
         past_input_b = None
 
-    
+
 
 setup(420, 420, 370, 0)
 start_time = time.time()

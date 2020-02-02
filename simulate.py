@@ -19,6 +19,8 @@ class QuantumSimulation():
         self.shots_num = 1
         self.result = None
         self.did_win = None
+        self.game_gates1 = []
+        self.game_gates2 = []
 
     def load_gates(self):
 
@@ -64,6 +66,13 @@ class QuantumSimulation():
         elif str(player) == "2":
             self.gates2.append(gate.upper())
 
+    def add_game_gate(self, player, gate):
+
+        if str(player) == "1":
+            self.game_gates1.append(gate.upper())
+        elif str(player) == "2":
+            self.game_gates2.append(gate.upper())
+
     def run(self):
         simulator = Aer.get_backend('qasm_simulator')
         self.qc.measure([0,1],[1,0])
@@ -85,6 +94,22 @@ class QuantumSimulation():
 
         self.qc = QuantumCircuit(1, 1)
         simulator = Aer.get_backend('qasm_simulator')
+
+        for i in range(len(self.game_gates1)):
+            if self.game_gates1[i] == 'T':
+                self.qc.rx(np.pi/4,0)
+            elif self.game_gates1[i] == 'S':
+                self.qc.rx(np.pi/2,0)
+            elif self.game_gates1[i] == 'Z':
+                self.qc.x(0)
+
+        for i in range(len(self.game_gates2)):
+            if self.game_gates2[i] == 'T':
+                self.qc.rx(np.pi/4,1)
+            elif self.game_gates2[i] == 'S':
+                self.qc.rx(np.pi/2,1)
+            elif self.game_gates2[i] == 'Z':
+                self.qc.x(1)
 
         # self.qc.h(0)
         # self.qc.cx(0,1)
