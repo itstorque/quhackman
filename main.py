@@ -57,7 +57,7 @@ screensize(800, 600)
 setworldcoordinates(-190, -170, 150, 170)
 
 simulation = simulate.QuantumSimulation()
-
+randomizer = simulate.QuantumRandomizer()
 resizemode('auto')
 
 state = {'score_a': 0, 'score_b': 0}
@@ -494,35 +494,16 @@ def move():
                     path.dot(5, 'red')
                     
     if time_length > gate_collect_time:
+        gate_choice = randomizer.random_num_generator()
+        gates = [sgate,tgate,measure,zgate]
+        
         index = random.randint(1,399)
         if int(round(time_length)) % 15 == 0 and tiles[index] == 1:
             x = (index % 20) * 20 - 200
             y = 180 - (index // 20) * 20
             path.up()
             path.goto(x + 10, y + 10)
-            path.shape(sgate)
-            path.resizemode('auto')
-            path.turtlesize(1)
-            path.stamp()
-            
-        index = random.randint(1,399)
-        if int(round(time_length)) % 25 == 0 and tiles[index] == 1:
-            x = (index % 20) * 20 - 200
-            y = 180 - (index // 20) * 20
-            path.up()
-            path.goto(x + 10, y + 10)
-            path.shape(measure)
-            path.resizemode('auto')
-            path.turtlesize(1)
-            path.stamp()
-            
-        index = random.randint(1,399)
-        if int(round(time_length)) % 25 == 0 and tiles[index] == 1:
-            x = (index % 20) * 20 - 200
-            y = 180 - (index // 20) * 20
-            path.up()
-            path.goto(x + 10, y + 10)
-            path.shape(tgate)
+            path.shape(gates[gate_choice])
             path.resizemode('auto')
             path.turtlesize(1)
             path.stamp()
