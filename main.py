@@ -285,8 +285,8 @@ def move():
     time_length = end_time - start_time
 
     clear()
-    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
-    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
+#    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
+#    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
     if valid(pacman + aim):
         if pacman_mult > 1 and str(pacman.x)[-1] == '5' or str(pacman.y)[-1] == '5':
             if(pacman in top and aim == vector(0,5)):
@@ -421,7 +421,7 @@ def move():
             return
     
     global gate_collect_time
-    print(time_length)
+#    print(time_length)
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
 
         simulation.run()

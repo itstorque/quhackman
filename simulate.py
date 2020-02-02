@@ -1,5 +1,5 @@
 """
-    Simulation file for Qu[H]ackMan
+    Simulation file for Qu[H]ack[Wo]man
 """
 
 from qiskit import QuantumCircuit, Aer, execute
