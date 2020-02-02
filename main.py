@@ -20,6 +20,7 @@ while artificialGhostCount == None:
         if temp < 9: artificialGhostCount = temp
     except: pass
 
+gate_collect_time = 10.
 
 past_input_a = None
 past_input_b = None
@@ -284,9 +285,10 @@ def move():
     time_length = end_time - start_time
 
     clear()
-
+    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
+    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
     if valid(pacman + aim):
-        if pacman_mult > 1 and str(pacman.x)[-1] == '5':
+        if pacman_mult > 1 and str(pacman.x)[-1] == '5' or str(pacman.y)[-1] == '5':
             if(pacman in top and aim == vector(0,5)):
                 pacman.move(bottom[1]-top[1])
             elif(pacman in bottom and aim == vector(0,-5)):
@@ -310,7 +312,7 @@ def move():
                 pacman.move(pacman_mult*aim)
                 
     if valid(pacman2 + aim2):       
-        if pacman2_mult > 1 and str(pacman2.x)[-1] == '5':
+        if pacman2_mult > 1 and str(pacman2.x)[-1] == '5' or str(pacman2.y)[-1] == '5':
             if(pacman2 in top and aim2 == vector(0,5)):
                 pacman2.move(bottom[1]-top[1])
             elif(pacman2 in bottom and aim2 == vector(0,-5)):
@@ -411,20 +413,26 @@ def move():
         dot(20, 'red')
 
     update()
-
-    gate_collect_time = 5.
-
+    
+    for point, course in ghosts:
+        if abs(pacman - point) < 20:
+            return
+        if abs(pacman2 - point) < 20:
+            return
+    
+    global gate_collect_time
+    print(time_length)
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
 
         simulation.run()
         output_sim = simulation.output
 
-        if output_sim.get('00',0) == 1:
+        if output_sim.get('00', 0) == 1:
             pacman_mult = 1.
-            pacman2_mult = 1.5
+            pacman2_mult = 2.
 
         if output_sim.get('11',0) == 1:
-            pacman_mult = 1.5
+            pacman_mult = 2.
             pacman2_mult = 1.
 
         for index in range(len(tiles)):
