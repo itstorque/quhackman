@@ -30,10 +30,13 @@ walls = True
 
 playerFast = 'sprites/playerFast.gif'
 register_shape(playerFast)
+
 playerSuperpos = 'sprites/playerSuperpos.gif'
 register_shape(playerSuperpos)
+
 playerSlow = 'sprites/playerSlow.gif'
 register_shape(playerSlow)
+
 pacman_mult = 1
 pacman2_mult = 1
 
@@ -43,6 +46,7 @@ tgate = 'sprites/gateT.gif'
 sgate = 'sprites/gateS.gif'
 zgate = 'sprites/gateZ.gif'
 measure = 'sprites/measure.gif'
+
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
@@ -50,6 +54,7 @@ register_shape(measure)
 
 winstate = 'sprites/win_state.gif'
 losestate = 'sprites/lose_state.gif'
+
 register_shape(winstate)
 register_shape(losestate)
 
@@ -488,6 +493,7 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'red')
+                    
                 elif tile == 7:
                     path.up()
                     path.goto(x + 10, y + 10)
@@ -495,7 +501,7 @@ def move():
                     path.resizemode('auto')
                     path.turtlesize(1)
                     path.stamp()
-
+                
     if time_length > gate_collect_time:
         gate_choice = randomizer.random_num_generator()
         gates = [sgate,tgate,measure,zgate]
@@ -506,10 +512,11 @@ def move():
             y = 180 - (index // 20) * 20
             path.up()
             path.goto(x + 10, y + 10)
-            path.shape(gates[gate_choice])
+            path.shape(gates[int(gate_choice)])
             path.resizemode('auto')
             path.turtlesize(1)
             path.stamp()
+#        count_random += 1
     bloch1()
     bloch2()
 
