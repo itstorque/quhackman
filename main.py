@@ -207,14 +207,6 @@ def world():
                 path.turtlesize(1)
                 path.stamp()
 
-            elif tile == 7:
-                path.up()
-                path.goto(x + 10, y + 10)
-                path.shape(measure)
-                path.resizemode('auto')
-                path.turtlesize(1)
-                path.stamp()
-
     walls = False
 
 def check_collision(playerIndex, perform):
@@ -390,13 +382,11 @@ def move():
     else:
         check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
                                 5: lambda: simulation.add_gate(1, "s"),
-                                6: lambda: simulation.add_gate(1, "z"),
-                                7: lambda: print("SIM A>", state, done())})
+                                6: lambda: simulation.add_gate(1, "z")})
 
         check_collision(index2, {4: lambda: simulation.add_gate(2, "t"),
                                  5: lambda: simulation.add_gate(2, "s"),
-                                 6: lambda: simulation.add_gate(2, "z"),
-                                 7: lambda: print("SIM B>", state, done())})
+                                 6: lambda: simulation.add_gate(2, "z")})
 
     up()
     goto(pacman.x + 10, pacman.y + 10)
@@ -450,21 +440,23 @@ def move():
             return
         if abs(pacman2 - point) < 20:
             return
-            
+
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
 
         simulation.run()
         output_sim = simulation.output
 
         if output_sim.get('00', 0) == 1:
-            pacman_mult = 1.
-            pacman2_mult = 2.
-            player1, player2 = playerSlow, playerFast
-
-        if output_sim.get('11',0) == 1:
             pacman_mult = 2.
             pacman2_mult = 1.
             player1, player2 = playerFast, playerSlow
+            print("Player 1 is real fast now")
+
+        elif output_sim.get('11', 0) == 1:
+            pacman_mult = 1.
+            pacman2_mult = 2.
+            player1, player2 = playerSlow, playerFast
+            print("Player 2 is real fast now")
 
         for index in range(len(tiles)):
             tile = tiles[index]
@@ -476,6 +468,13 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'purple')
+                elif tile == 7:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.shape(measure)
+                    path.resizemode('auto')
+                    path.turtlesize(1)
+                    path.stamp()
 
     bloch1()
     bloch2()
