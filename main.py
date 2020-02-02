@@ -310,51 +310,34 @@ def move():
     clear()
     print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
     print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
+
     if valid(pacman + aim):
-        if pacman_mult > 1 and str(pacman.x)[-1] == '5' or str(pacman.y)[-1] == '5':
-            if(pacman in top and aim == vector(0,5)):
-                pacman.move(bottom[1]-top[1])
-            elif(pacman in bottom and aim == vector(0,-5)):
-                pacman.move(top[1]-bottom[1])
-            elif(pacman in left and aim == vector(-5,0)):
-                pacman.move(right[1]-left[1])
-            elif(pacman in right and aim == vector(5,0)):
-                pacman.move(left[1]-right[1])
-            else:
-                pacman.move(aim)
+        if(pacman in top and aim == vector(0,5)):
+            pacman.move(bottom[1]-top[1])
+        elif(pacman in bottom and aim == vector(0,-5)):
+            pacman.move(top[1]-bottom[1])
+        elif(pacman in left and aim == vector(-5,0)):
+            pacman.move(right[1]-left[1])
+        elif(pacman in right and aim == vector(5,0)):
+            pacman.move(left[1]-right[1])
         else:
-            if(pacman in top and aim == vector(0,5)):
-                pacman.move(bottom[1]-top[1])
-            elif(pacman in bottom and aim == vector(0,-5)):
-                pacman.move(top[1]-bottom[1])
-            elif(pacman in left and aim == vector(-5,0)):
-                pacman.move(right[1]-left[1])
-            elif(pacman in right and aim == vector(5,0)):
-                pacman.move(left[1]-right[1])
+            if pacman_mult > 1 and str(pacman.x)[-1] == '5' or str(pacman.y)[-1] == '5':
+                pacman.move(aim)
             else:
                 pacman.move(pacman_mult*aim)
 
     if valid(pacman2 + aim2):
-        if pacman2_mult > 1 and str(pacman2.x)[-1] == '5' or str(pacman2.y)[-1] == '5':
-            if(pacman2 in top and aim2 == vector(0,5)):
-                pacman2.move(bottom[1]-top[1])
-            elif(pacman2 in bottom and aim2 == vector(0,-5)):
-                pacman2.move(top[1]-bottom[1])
-            elif(pacman2 in left and aim2 == vector(-5,0)):
-                pacman2.move(right[1]-left[1])
-            elif(pacman2 in right and aim2 == vector(5,0)):
-                pacman2.move(left[1]-right[1])
-            else:
-                pacman2.move(aim2)
+        if(pacman2 in top and aim2 == vector(0,5)):
+            pacman2.move(bottom[1]-top[1])
+        elif(pacman2 in bottom and aim2 == vector(0,-5)):
+            pacman2.move(top[1]-bottom[1])
+        elif(pacman2 in left and aim2 == vector(-5,0)):
+            pacman2.move(right[1]-left[1])
+        elif(pacman2 in right and aim2 == vector(5,0)):
+            pacman2.move(left[1]-right[1])
         else:
-            if(pacman2 in top and aim2 == vector(0,5)):
-                pacman2.move(bottom[1]-top[1])
-            elif(pacman2 in bottom and aim2 == vector(0,-5)):
-                pacman2.move(top[1]-bottom[1])
-            elif(pacman2 in left and aim2 == vector(-5,0)):
-                pacman2.move(right[1]-left[1])
-            elif(pacman2 in right and aim2 == vector(5,0)):
-                pacman2.move(left[1]-right[1])
+            if pacman2_mult > 1 and str(pacman2.x)[-1] == '5' or str(pacman2.y)[-1] == '5':
+                pacman2.move(aim2)
             else:
                 pacman2.move(pacman2_mult*aim2)
 
@@ -441,7 +424,7 @@ def move():
         if abs(pacman2 - point) < 20:
             return
 
-    if time_length > gate_collect_time and time_length < gate_collect_time + .2:
+    if time_length > gate_collect_time and time_length < gate_collect_time + .5:
 
         simulation.run()
         output_sim = simulation.output
@@ -467,7 +450,7 @@ def move():
                 if tile == 1:
                     path.up()
                     path.goto(x + 10, y + 10)
-                    path.dot(5, 'purple')
+                    path.dot(5, 'red')
                 elif tile == 7:
                     path.up()
                     path.goto(x + 10, y + 10)
