@@ -24,12 +24,18 @@ while artificialGhostCount == None:
 past_input_a = None
 past_input_b = None
 HARDCODE_BOTH = False
+walls = True
 
-player1 = 'player.gif'
-register_shape(player1)
-player2 = 'turtle'
+playerFast = 'playerFast.gif'
+register_shape(playerFast)
+playerSuperpos = 'playerSuperpos.gif'
+register_shape(playerSuperpos)
+playerSlow = 'playerSlow.gif'
+register_shape(playerSlow)
 pacman_mult = 1
 pacman2_mult = 1
+
+player1, player2 = playerSuperpos, playerSuperpos
 
 tgate = 'gateT.gif'
 sgate = 'gateS.gif'
@@ -109,6 +115,8 @@ def square(x, y, gate=""):
     "Draw square using path at (x, y)."
     path.up()
     path.goto(x, y)
+    path.color('white')
+
     path.down()
     path.begin_fill()
 
@@ -117,6 +125,25 @@ def square(x, y, gate=""):
         path.left(90)
 
     path.end_fill()
+
+    if walls:
+
+        path.up()
+        path.goto(x, y+20)
+        path.down()
+        path.begin_fill()
+        path.color("grey")
+
+        path.forward(20)
+        path.left(90)
+        path.forward(5)
+        path.left(90)
+        path.forward(20)
+        path.left(90)
+        path.forward(5)
+        path.left(90)
+
+        path.end_fill()
 
 def offset(point):
     "Return offset of point in tiles."
@@ -141,10 +168,13 @@ def valid(point):
 
 def world():
     "Draw world using path."
+
+    global walls
+
     bgcolor('black')
     path.color('white')
 
-    for index in range(len(tiles)):
+    for index in reversed(range(len(tiles))):
         tile = tiles[index]
 
         if tile > 0:
@@ -183,6 +213,8 @@ def world():
                 path.resizemode('auto')
                 path.turtlesize(1)
                 path.stamp()
+
+    walls = False
 
 def check_collision(playerIndex, perform):
     # perform is a dictionary of function
@@ -272,11 +304,9 @@ def bloch2():
 
 def move():
     "Move pacman and all ghosts."
-    global past_input_a
-    global past_input_b
-
-    global pacman_mult
-    global pacman2_mult
+    global past_input_a, past_input_b
+    global pacman_mult, pacman2_mult
+    global player1, player2
 
     # writer.undo()
     # writer.write(str(state['score_a']) + " | " + str(state['score_b']))
@@ -388,7 +418,7 @@ def move():
 
     update()
 
-    gate_collect_time = 5.
+    gate_collect_time = 20.
 
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
 
@@ -398,10 +428,12 @@ def move():
         if output_sim.get('00',0) == 1:
             pacman_mult = 1.
             pacman2_mult = 1.5
+            player1, player2 = playerSlow, playerFast
 
         if output_sim.get('11',0) == 1:
             pacman_mult = 1.5
             pacman2_mult = 1.
+            player1, player2 = playerFast, playerSlow
 
         for index in range(len(tiles)):
             tile = tiles[index]
