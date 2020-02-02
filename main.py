@@ -27,28 +27,28 @@ past_input_b = None
 HARDCODE_BOTH = False
 walls = True
 
-playerFast = 'playerFast.gif'
+playerFast = 'sprites/playerFast.gif'
 register_shape(playerFast)
-playerSuperpos = 'playerSuperpos.gif'
+playerSuperpos = 'sprites/playerSuperpos.gif'
 register_shape(playerSuperpos)
-playerSlow = 'playerSlow.gif'
+playerSlow = 'sprites/playerSlow.gif'
 register_shape(playerSlow)
 pacman_mult = 1
 pacman2_mult = 1
 
 player1, player2 = playerSuperpos, playerSuperpos
 
-tgate = 'gateT.gif'
-sgate = 'gateS.gif'
-zgate = 'gateZ.gif'
-measure = 'measure.gif'
+tgate = 'sprites/gateT.gif'
+sgate = 'sprites/gateS.gif'
+zgate = 'sprites/gateZ.gif'
+measure = 'sprites/measure.gif'
 register_shape(tgate)
 register_shape(sgate)
 register_shape(zgate)
 register_shape(measure)
 
-winstate = 'win_state.gif'
-losestate = 'lose_state.gif'
+winstate = 'sprites/win_state.gif'
+losestate = 'sprites/lose_state.gif'
 register_shape(winstate)
 register_shape(losestate)
 
@@ -308,8 +308,8 @@ def move():
     time_length = end_time - start_time
 
     clear()
-    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
-    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
+    # print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
+    # print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
 
     if valid(pacman + aim):
         if(pacman in top and aim == vector(0,5)):

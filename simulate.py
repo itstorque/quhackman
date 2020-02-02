@@ -5,20 +5,6 @@
 from qiskit import QuantumCircuit, Aer, execute, QuantumRegister, ClassicalRegister
 import numpy as np
 
-def real_map(value, leftMin, leftMax, rightMin, rightMax):
-
-
-    # Maps one range to another
-    # Figure out how 'wide' each range is
-    leftSpan = leftMax - leftMin
-    rightSpan = rightMax - rightMin
-
-    # Convert the left range into a 0-1 range (float)
-    valueScaled = float(value - leftMin) / float(leftSpan)
-
-    # Convert the 0-1 range into a value in the right range.
-    return rightMin + (valueScaled * rightSpan)
-
 class QuantumSimulation():
 
     def __init__(self):
@@ -31,7 +17,6 @@ class QuantumSimulation():
         self.output = []
         self.shots_num = 1
         self.result = None
-        self.rng_n_qubits = 2
 
     def load_gates(self):
 
@@ -113,6 +98,26 @@ class QuantumSimulation():
         self.did_win = (player_number, zero_counts > one_counts)
 
 
+class QuantumRandomizer:
+
+    def __init__(self):
+
+        self.rng_n_qubits = 2
+
+    def real_map(self, value, leftMin, leftMax, rightMin, rightMax):
+        """this function was based on code from the repo: [ozanerhansha/qRNG]"""
+
+        # Maps one range to another
+        # Figure out how 'wide' each range is
+        leftSpan = leftMax - leftMin
+        rightSpan = rightMax - rightMin
+
+        # Convert the left range into a 0-1 range (float)
+        valueScaled = float(value - leftMin) / float(leftSpan)
+
+        # Convert the 0-1 range into a value in the right range.
+        return rightMin + (valueScaled * rightSpan)
+
     def random_num_generator(self,lower_bound,higher_bound):
         q = QuantumRegister(self.rng_n_qubits, 'q')
         circ = QuantumCircuit(q)
@@ -140,7 +145,6 @@ class QuantumSimulation():
                 n2 = np.real(output[i])
                 n3 = np.imag(output[i])
 
-        y = real_map(n1+n2+n3, -self.rng_n_qubits, len(output)-1+self.rng_n_qubits, \
-             lower_bound, higher_bound)
+        y = self.real_map(n1+n2+n3, -self.rng_n_qubits, len(output)-1+self.rng_n_qubits, lower_bound, higher_bound)
 
         return y
