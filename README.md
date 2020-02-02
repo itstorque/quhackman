@@ -71,11 +71,11 @@ The GitHub repository link is [https://github.com/tareqdandachi/quhackman](https
 ### Things we would wanna fix/implement but didn't have enough time to do
 
 
-*   Graphics
-*   Randomized gate creation over time (Rx, H, switch, measure)
-*   No measure gates before player reveal
-*   Game end on measure block collection
-*   Final winner determination
+* Graphics
+* More than 2 player support
+* Better quantum circuit visualization
+* Option to pick between real and simulated quantum simulation as opposed ot editing the source code
+* Adding more gates and game mechanics to make it more fun
 
 ## Highlights:
 
