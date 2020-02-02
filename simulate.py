@@ -1,3 +1,7 @@
+"""
+    Simulation file for Qu[H]ackMan
+"""
+
 from qiskit import QuantumCircuit, Aer, execute
 
 class QuantumSimulation():

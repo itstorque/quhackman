@@ -1,6 +1,0 @@
-q = quantum_simulation()
-q.gates1.append('S')
-q.gates1.append('')
-q.load_gates()
-q.run()
-plot_histogram(q.output)
