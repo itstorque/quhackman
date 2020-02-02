@@ -17,6 +17,7 @@ class QuantumSimulation():
         self.output = []
         self.shots_num = 1
         self.result = None
+        self.did_win = None
 
     def load_gates(self):
 
@@ -77,6 +78,7 @@ class QuantumSimulation():
     def measure(self, ra, rb, player_number):
 
         self.qc = QuantumCircuit(2, 1)
+        simulator = Aer.get_backend('qasm_simulator')
 
         self.qc.h(0)
         self.qc.cx(0,1)

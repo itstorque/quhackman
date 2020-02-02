@@ -302,6 +302,10 @@ def move():
     global player1, player2
     global gate_collect_time
 
+    if simulation.did_win != None:
+        print(simulation.did_win)
+        done()
+
     # writer.undo()
     # writer.write(str(state['score_a']) + " | " + str(state['score_b']))
     end_time = time.time()
@@ -355,13 +359,13 @@ def move():
                                 4: lambda: simulation.add_gate(1, "t"),
                                 5: lambda: simulation.add_gate(1, "s"),
                                 6: lambda: simulation.add_gate(1, "z"),
-                                7: lambda: print("SIM A>", state, done())})
+                                7: lambda: simulation.measure(state["score_a"], state["score_b"], 1)})
 
         check_collision(index2, {1: lambda: inc_score('b'),
                                  4: lambda: simulation.add_gate(2, "t"),
                                  5: lambda: simulation.add_gate(2, "s"),
                                  6: lambda: simulation.add_gate(2, "z"),
-                                 7: lambda: print("SIM B>", state, done())})
+                                 7: lambda: simulation.measure(state["score_a"], state["score_b"], 2)})
     else:
         check_collision(index, {4: lambda: simulation.add_gate(1, "t"),
                                 5: lambda: simulation.add_gate(1, "s"),
