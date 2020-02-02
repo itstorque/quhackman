@@ -1,10 +1,9 @@
 
-
-***QuhacMan: a Quantum Two-player PacMan Game***
+# QuhacMan: a Quantum Two-player PacMan Game***
 
 Tareq El Dandachi, Matthew Baldwin, Qichen Song, Haozhe Wang
 
-**Introduction**
+## Introduction
 
 The development of quantum computing has offered revolutionary scope for many traditional areas. Game theory, a theory to study decision making in conflict situations, has been transferred into quantum version[1]. The quantum game theory is different from the traditional one in three different ways[2]:
 
@@ -18,13 +17,13 @@ These features indicate that in quantum scenario, the definition of win and lose
 
 In this project, we propose a quantum game, which is a modified version of the multi-player PacMan game. The game is a validation of quantum game theory and test quantum win strategies.
 
-**Basic principles**
+## Basic principles
 
 The two-qubit state is initialized at entangled states psi = a |01>+b|10>. Each player will collect certain gates during the game (either acting on both qubits or ). Effectively, the prefactor a and b change dynamically during the game. There are measurement gates available for the player to pick up as well. Upon one-shot measurement, the quantum state collapses to player one getting |0> and player two getting |1> or the opposite. Whoever gets |0> is the winner!
 
 The evaluation of the quantum circuit generating from the gaming processes are conducted by qiskit package.
 
-**Elements and rules**
+## Elements and rules
 
 
 Two players in the game are gambling the final output of a quantum circuit with two entangled qubits. One can gain an advantage to win by eating beans to modify the Bloch sphere of their qubit. After measurement, the entangled qubits collapse to classical states, determines the game result.
@@ -60,7 +59,7 @@ Advanced Strategies:
 *   Try to lower down the pointer of your opponent
 *   Finish/Measure the game when you have advantage (But moving there may eat more beans, worth it?)
 
-**Demonstrations:**
+## Demonstrations:
 
 The GitHub repository link is [https://github.com/tareqdandachi/quhackman](https://github.com/tareqdandachi/quhackman).
 
@@ -68,7 +67,7 @@ The GitHub repository link is [https://github.com/tareqdandachi/quhackman](https
 
 [2]Quantum Game Theory, Wikipedia. [https://en.wikipedia.org/wiki/Quantum_game_theory](https://en.wikipedia.org/wiki/Quantum_game_theory)
 
-**TO DO**
+## ToDo:
 
 
 
@@ -79,7 +78,7 @@ The GitHub repository link is [https://github.com/tareqdandachi/quhackman](https
 *   Game end on measure block collection
 *   Final winner determination
 
-**Highlights:**
+## Highlights:
 
 
 
