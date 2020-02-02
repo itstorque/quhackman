@@ -1,7 +1,8 @@
 """
-    Qu[H]ackMan main python file for game logic, a Quantum PackMan game made for MIT/iQuHack.
+    Qu[H]ack[Wo]Man main python file for game logic, a Quantum PackMan game made for MIT/iQuHack.
 """
 import time
+import random
 from random import choice
 from turtle import *
 from freegames import floor, vector
@@ -65,6 +66,8 @@ path = Turtle(visible=False)
 
 aim = vector(5, 0)
 aim2 = vector(-5, 0)
+count_time = 0
+reset_point = vector(-60,-40)
 
 top = [vector(-40,170),vector(-40,175)]
 bottom = [vector(-40,-170),vector(-40,-175),]
@@ -169,7 +172,6 @@ def valid(point):
 
 def world():
     "Draw world using path."
-
     global walls
 
     bgcolor('black')
@@ -177,7 +179,7 @@ def world():
 
     for index in reversed(range(len(tiles))):
         tile = tiles[index]
-
+#        print(index)
         if tile > 0:
             x = (index % 20) * 20 - 200
             y = 180 - (index // 20) * 20
@@ -305,6 +307,7 @@ def bloch2():
 
 def move():
     "Move pacman and all ghosts."
+    
     global past_input_a, past_input_b
     global pacman_mult, pacman2_mult
     global player1, player2
@@ -425,19 +428,46 @@ def move():
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
-
-    update()
-
+    global gate_collect_time
     for point, course in ghosts:
         if abs(pacman - point) < 20:
-            return
+            if time_length > gate_collect_time:
+                state['score_a'] -= 10
+                state['score_b'] += 10
+            pacman.move(reset_point-pacman)
+            up()
+            goto(pacman.x + 10, pacman.y + 10)
+            shape(player1)
+            resizemode('auto')
+            penup()
+            turtlesize(1)
+            color('green')
+            stamp()
+            break
+            
         if abs(pacman2 - point) < 20:
-            return
-    
-    global gate_collect_time
-#    print(time_length)
+            
+            if time_length > gate_collect_time:
+                state['score_a'] += 10
+                state['score_b'] -= 10
+            pacman2.move(reset_point-pacman2)
+            up()
+            goto(pacman2.x + 10, pacman2.y + 10)
+            shape(player2)
+            resizemode('auto')
+            penup()
+            turtlesize(1)
+            color('green')
+            stamp()
+            break
+            
+    update()
 
-    if time_length > gate_collect_time and time_length < gate_collect_time + .5:
+    global count_time
+#    print(time_length)
+    print('count', count_time, 'int(round(time_length,0))',int(round(time_length,0)))
+    if int(round(time_length,0)) == int(round(gate_collect_time,0)) and count_time == 0:
+        count_time += 1
 
         simulation.run()
         output_sim = simulation.output
@@ -462,7 +492,40 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'red')
-
+                    
+    if time_length > gate_collect_time:
+        index = random.randint(1,399)
+        if int(round(time_length)) % 15 == 0 and tiles[index] == 1:
+            x = (index % 20) * 20 - 200
+            y = 180 - (index // 20) * 20
+            path.up()
+            path.goto(x + 10, y + 10)
+            path.shape(sgate)
+            path.resizemode('auto')
+            path.turtlesize(1)
+            path.stamp()
+            
+        index = random.randint(1,399)
+        if int(round(time_length)) % 25 == 0 and tiles[index] == 1:
+            x = (index % 20) * 20 - 200
+            y = 180 - (index // 20) * 20
+            path.up()
+            path.goto(x + 10, y + 10)
+            path.shape(measure)
+            path.resizemode('auto')
+            path.turtlesize(1)
+            path.stamp()
+            
+        index = random.randint(1,399)
+        if int(round(time_length)) % 25 == 0 and tiles[index] == 1:
+            x = (index % 20) * 20 - 200
+            y = 180 - (index // 20) * 20
+            path.up()
+            path.goto(x + 10, y + 10)
+            path.shape(tgate)
+            path.resizemode('auto')
+            path.turtlesize(1)
+            path.stamp()
     bloch1()
     bloch2()
 
@@ -487,6 +550,8 @@ def change(x, y, both=True, save=True):
         aim2.x = x
         aim2.y = y
         past_input_b = None
+
+    
 
 setup(420, 420, 370, 0)
 start_time = time.time()
