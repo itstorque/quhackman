@@ -20,6 +20,7 @@ while artificialGhostCount == None:
         if temp < 9: artificialGhostCount = temp
     except: pass
 
+gate_collect_time = 10.
 
 past_input_a = None
 past_input_b = None
@@ -307,6 +308,7 @@ def move():
     global past_input_a, past_input_b
     global pacman_mult, pacman2_mult
     global player1, player2
+    global gate_collect_time
 
     # writer.undo()
     # writer.write(str(state['score_a']) + " | " + str(state['score_b']))
@@ -314,30 +316,55 @@ def move():
     time_length = end_time - start_time
 
     clear()
-
+    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
+    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
     if valid(pacman + aim):
-        if(pacman in top and aim == vector(0,5)):
-            pacman.move(bottom[1]-top[1])
-        elif(pacman in bottom and aim == vector(0,-5)):
-            pacman.move(top[1]-bottom[1])
-        elif(pacman in left and aim == vector(-5,0)):
-            pacman.move(right[1]-left[1])
-        elif(pacman in right and aim == vector(5,0)):
-            pacman.move(left[1]-right[1])
+        if pacman_mult > 1 and str(pacman.x)[-1] == '5' or str(pacman.y)[-1] == '5':
+            if(pacman in top and aim == vector(0,5)):
+                pacman.move(bottom[1]-top[1])
+            elif(pacman in bottom and aim == vector(0,-5)):
+                pacman.move(top[1]-bottom[1])
+            elif(pacman in left and aim == vector(-5,0)):
+                pacman.move(right[1]-left[1])
+            elif(pacman in right and aim == vector(5,0)):
+                pacman.move(left[1]-right[1])
+            else:
+                pacman.move(aim)
         else:
-            pacman.move(pacman_mult*aim)
+            if(pacman in top and aim == vector(0,5)):
+                pacman.move(bottom[1]-top[1])
+            elif(pacman in bottom and aim == vector(0,-5)):
+                pacman.move(top[1]-bottom[1])
+            elif(pacman in left and aim == vector(-5,0)):
+                pacman.move(right[1]-left[1])
+            elif(pacman in right and aim == vector(5,0)):
+                pacman.move(left[1]-right[1])
+            else:
+                pacman.move(pacman_mult*aim)
 
     if valid(pacman2 + aim2):
-        if(pacman2 in top and aim2 == vector(0,5)):
-            pacman2.move(bottom[1]-top[1])
-        elif(pacman2 in bottom and aim2 == vector(0,-5)):
-            pacman2.move(top[1]-bottom[1])
-        elif(pacman2 in left and aim2 == vector(-5,0)):
-            pacman2.move(right[1]-left[1])
-        elif(pacman2 in right and aim2 == vector(5,0)):
-            pacman2.move(left[1]-right[1])
+        if pacman2_mult > 1 and str(pacman2.x)[-1] == '5' or str(pacman2.y)[-1] == '5':
+            if(pacman2 in top and aim2 == vector(0,5)):
+                pacman2.move(bottom[1]-top[1])
+            elif(pacman2 in bottom and aim2 == vector(0,-5)):
+                pacman2.move(top[1]-bottom[1])
+            elif(pacman2 in left and aim2 == vector(-5,0)):
+                pacman2.move(right[1]-left[1])
+            elif(pacman2 in right and aim2 == vector(5,0)):
+                pacman2.move(left[1]-right[1])
+            else:
+                pacman2.move(aim2)
         else:
-            pacman2.move(pacman2_mult*aim2)
+            if(pacman2 in top and aim2 == vector(0,5)):
+                pacman2.move(bottom[1]-top[1])
+            elif(pacman2 in bottom and aim2 == vector(0,-5)):
+                pacman2.move(top[1]-bottom[1])
+            elif(pacman2 in left and aim2 == vector(-5,0)):
+                pacman2.move(right[1]-left[1])
+            elif(pacman2 in right and aim2 == vector(5,0)):
+                pacman2.move(left[1]-right[1])
+            else:
+                pacman2.move(pacman2_mult*aim2)
 
     if past_input_a != None:
         change(*past_input_a, "a", save=False)
@@ -418,20 +445,24 @@ def move():
 
     update()
 
-    gate_collect_time = 20.
-
+    for point, course in ghosts:
+        if abs(pacman - point) < 20:
+            return
+        if abs(pacman2 - point) < 20:
+            return
+            
     if time_length > gate_collect_time and time_length < gate_collect_time + .2:
 
         simulation.run()
         output_sim = simulation.output
 
-        if output_sim.get('00',0) == 1:
+        if output_sim.get('00', 0) == 1:
             pacman_mult = 1.
-            pacman2_mult = 1.5
+            pacman2_mult = 2.
             player1, player2 = playerSlow, playerFast
 
         if output_sim.get('11',0) == 1:
-            pacman_mult = 1.5
+            pacman_mult = 2.
             pacman2_mult = 1.
             player1, player2 = playerFast, playerSlow
 
