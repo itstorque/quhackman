@@ -21,7 +21,7 @@ while artificialGhostCount == None:
         if temp < 9: artificialGhostCount = temp
     except: pass
 
-gate_collect_time = 10.
+gate_collect_time = 20.
 
 past_input_a = None
 past_input_b = None
@@ -57,6 +57,11 @@ losestate = 'sprites/lose_state.gif'
 
 register_shape(winstate)
 register_shape(losestate)
+
+lwin = 'sprites/lwin.gif'
+register_shape(lwin)
+rwin = 'sprites/rwin.gif'
+register_shape(rwin)
 
 screensize(800, 600)
 setworldcoordinates(-190, -170, 150, 170)
@@ -312,7 +317,19 @@ def move():
 
     if simulation.did_win != None:
         print(simulation.did_win)
-        done()
+        clear()
+        blochFig1.clear()
+        blochFig2.clear()
+        path.up()
+        path.goto(-100,0)
+        if simulation.did_win == (1, True) or simulation.did_win == (2, False):
+            path.shape(rwin)
+        else:
+            path.shape(lwin)
+        path.resizemode('auto')
+        path.turtlesize(1)
+        path.stamp()
+        return
 
     # writer.undo()
     # writer.write(str(state['score_a']) + " | " + str(state['score_b']))
@@ -320,8 +337,8 @@ def move():
     time_length = end_time - start_time
 
     clear()
-    print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
-    print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
+    # print('pacman dig',str(pacman.x)[-1],str(pacman.y)[-1], 'mult', pacman_mult)
+    # print('pacman2 dig',str(pacman2.x)[-1],str(pacman2.y)[-1], 'mult', pacman2_mult)
 
     if valid(pacman + aim):
         if(pacman in top and aim == vector(0,5)):
@@ -466,7 +483,7 @@ def move():
 
     global count_time
 #    print(time_length)
-    print('count', count_time, 'int(round(time_length,0))',int(round(time_length,0)))
+    # print('count', count_time, 'int(round(time_length,0))',int(round(time_length,0)))
     if int(round(time_length,0)) == int(round(gate_collect_time,0)) and count_time == 0:
         count_time += 1
 
@@ -493,7 +510,7 @@ def move():
                     path.up()
                     path.goto(x + 10, y + 10)
                     path.dot(5, 'red')
-                    
+
                 elif tile == 7:
                     path.up()
                     path.goto(x + 10, y + 10)
@@ -501,10 +518,35 @@ def move():
                     path.resizemode('auto')
                     path.turtlesize(1)
                     path.stamp()
-                
+
+                elif tile == 4:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.shape(tgate)
+                    path.resizemode('auto')
+                    path.turtlesize(1)
+                    path.stamp()
+
+                elif tile == 5:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.shape(sgate)
+                    path.resizemode('auto')
+                    path.turtlesize(1)
+                    path.stamp()
+
+                elif tile == 6:
+                    path.up()
+                    path.goto(x + 10, y + 10)
+                    path.shape(zgate)
+                    path.resizemode('auto')
+                    path.turtlesize(1)
+                    path.stamp()
+
     if time_length > gate_collect_time:
         gate_choice = randomizer.random_num_generator()
-        gates = [sgate,tgate,measure,zgate]
+        gates = [sgate,tgate,zgate,measure]
+        gate_num_choice = [5,4,6,7]
 
         index = random.randint(1,399)
         if int(round(time_length,0)) % 15 == 0 and tiles[index] == 1:
@@ -516,6 +558,7 @@ def move():
             path.resizemode('auto')
             path.turtlesize(1)
             path.stamp()
+            tiles[index] = int(gate_num_choice[int(gate_choice)])
 #        count_random += 1
     bloch1()
     bloch2()
